@@ -1,15 +1,17 @@
-# Reddit Clone
+# PhiloFeed
 
-A minimal Reddit-style web application built with Next.js, TypeScript, Prisma, and PostgreSQL. Features include user authentication, post creation with image uploads, threaded comments, and comment voting.
+A thoughtful community platform for sharing ideas and philosophical discussions. Built with Next.js, TypeScript, Prisma, and PostgreSQL. Features include user authentication, post creation with image uploads, threaded comments, and comment voting.
 
 ## Features
 
 - 🔐 **Authentication**: Email/password signup and login with secure session management
-- 📝 **Posts**: Create, view posts with optional image uploads
+- 📝 **Posts**: Create, view posts with optional image or video uploads
+- 🔼 **Post Voting**: Like/dislike posts with vote score tracking
 - 💬 **Comments**: Threaded comment system with nested replies
-- 👍 **Voting**: Like/dislike comments with score tracking
+- 👍 **Comment Voting**: Like/dislike comments with score tracking
+- 🎥 **Video Support**: Upload and share video content (MP4, WebM, OGG, MOV)
 - 📄 **Pagination**: Efficient pagination on the main feed
-- 🎨 **Modern UI**: Clean, responsive design with Tailwind CSS
+- 🎨 **Modern UI**: Clean, responsive design with Tailwind CSS in cerulean and white
 
 ## Tech Stack
 
@@ -34,7 +36,7 @@ A minimal Reddit-style web application built with Next.js, TypeScript, Prisma, a
 
 ```bash
 git clone <your-repo-url>
-cd jkwon-chinese-ethics-project
+cd philofeed
 ```
 
 2. **Install dependencies**
@@ -48,7 +50,7 @@ npm install
 Create a `.env` file in the root directory:
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/reddit_clone?schema=public"
+DATABASE_URL="postgresql://user:password@localhost:5432/philofeed?schema=public"
 SESSION_SECRET="your-secret-key-change-this-in-production"
 ```
 
@@ -112,14 +114,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### User
 - id, email, passwordHash, createdAt
-- Relations: posts, comments, votes, sessions
+- Relations: posts, comments, commentVotes, postVotes, sessions
 
 ### Session
 - id, userId, token, expiresAt, createdAt
 
 ### Post
-- id, title, content, imageUrl (optional), authorId, createdAt
-- Relations: author, comments
+- id, title, content, imageUrl (optional), videoUrl (optional), authorId, createdAt
+- Relations: author, comments, votes
 
 ### Comment
 - id, postId, authorId, content, parentCommentId (nullable), createdAt
@@ -128,6 +130,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### CommentVote
 - id, commentId, userId, value (1 or -1)
 - Unique constraint on (commentId, userId)
+
+### PostVote
+- id, postId, userId, value (1 or -1)
+- Unique constraint on (postId, userId)
 
 ## API Endpoints
 
@@ -141,9 +147,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Posts
 
 - `GET /api/posts?page=1&limit=10` - Get posts (paginated)
-- `POST /api/posts` - Create post (requires auth, supports FormData with image)
+- `POST /api/posts` - Create post (requires auth, supports FormData with image or video)
 - `GET /api/posts/[id]` - Get single post
 - `GET /api/posts/[id]/comments` - Get post comments
+- `POST /api/posts/[id]/vote` - Vote on post (requires auth)
 
 ### Comments
 
@@ -162,8 +169,19 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 1. Log in and click "Create Post"
 2. Enter a title and content
-3. Optionally upload an image (PNG, JPG, GIF, WebP up to 5MB)
+3. Optionally upload media:
+   - **Image**: PNG, JPG, GIF, WebP up to 5MB
+   - **Video**: MP4, WebM, OGG, MOV up to 50MB
+   - (Choose one: either image or video, not both)
 4. Click "Create Post"
+
+### Voting on Posts
+
+1. Find a post on the home feed or detail page
+2. Click the up arrow to upvote (like)
+3. Click the down arrow to downvote (dislike)
+4. Click again to remove your vote
+5. See the vote score between the arrows
 
 ### Commenting
 
@@ -300,5 +318,7 @@ See the [LICENSE](LICENSE) file for details.
 If you encounter any issues or have questions, please file an issue on GitHub.
 
 ---
+
+**PhiloFeed** - Where ideas flourish 🌊
 
 Built with ❤️ using Next.js and Prisma

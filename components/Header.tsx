@@ -10,10 +10,10 @@ export default async function Header() {
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">R</span>
+            <div className="w-8 h-8 bg-cerulean-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-lg">Φ</span>
             </div>
-            <span className="text-xl font-bold text-gray-900">Reddit Clone</span>
+            <span className="text-xl font-bold text-gray-900">PhiloFeed</span>
           </Link>
           
           <nav className="flex items-center space-x-4">

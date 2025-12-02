@@ -21,11 +21,12 @@ export default async function PostPage({ params }: PageProps) {
           email: true,
         },
       },
-      _count: {
-        select: { comments: true },
+        _count: {
+          select: { comments: true },
+        },
+        votes: true,
       },
-    },
-  })
+    })
   
   if (!post) {
     notFound()
@@ -47,7 +48,7 @@ export default async function PostPage({ params }: PageProps) {
   
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <PostDetail post={post} />
+      <PostDetail post={post} currentUserId={user?.id} />
       <div className="mt-8">
         <CommentSection 
           postId={id} 

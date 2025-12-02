@@ -91,7 +91,7 @@ export default function CommentItem({
             onClick={() => handleVote(1)}
             disabled={!currentUserId || isVoting}
             className={`p-1 rounded hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-              userVote === 1 ? 'text-orange-500' : 'text-gray-400'
+              userVote === 1 ? 'text-cerulean-500' : 'text-gray-400'
             }`}
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -100,7 +100,7 @@ export default function CommentItem({
           </button>
           
           <span className={`text-sm font-bold ${
-            score > 0 ? 'text-orange-500' : score < 0 ? 'text-blue-500' : 'text-gray-600'
+            score > 0 ? 'text-cerulean-500' : score < 0 ? 'text-gray-400' : 'text-gray-600'
           }`}>
             {score}
           </span>
@@ -109,7 +109,7 @@ export default function CommentItem({
             onClick={() => handleVote(-1)}
             disabled={!currentUserId || isVoting}
             className={`p-1 rounded hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-              userVote === -1 ? 'text-blue-500' : 'text-gray-400'
+              userVote === -1 ? 'text-gray-600' : 'text-gray-400'
             }`}
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -135,7 +135,7 @@ export default function CommentItem({
           {currentUserId && depth < maxDepth && (
             <button
               onClick={() => setShowReplyForm(!showReplyForm)}
-              className="text-sm text-gray-600 hover:text-orange-600 font-medium"
+              className="text-sm text-gray-600 hover:text-cerulean-600 font-medium"
             >
               {showReplyForm ? 'Cancel' : 'Reply'}
             </button>

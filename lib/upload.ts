@@ -3,18 +3,25 @@ import { join } from 'path'
 import { existsSync } from 'fs'
 
 const UPLOAD_DIR = join(process.cwd(), 'public', 'uploads')
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024 // 5MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024 // 50MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime']
 
-export async function saveUploadedFile(file: File): Promise<string> {
+export async function saveUploadedFile(file: File, type: 'image' | 'video'): Promise<string> {
+  const maxSize = type === 'image' ? MAX_IMAGE_SIZE : MAX_VIDEO_SIZE
+  const allowedTypes = type === 'image' ? ALLOWED_IMAGE_TYPES : ALLOWED_VIDEO_TYPES
+  
   // Validate file size
-  if (file.size > MAX_FILE_SIZE) {
-    throw new Error('File size exceeds 5MB limit')
+  if (file.size > maxSize) {
+    const sizeMB = maxSize / (1024 * 1024)
+    throw new Error(`File size exceeds ${sizeMB}MB limit`)
   }
   
   // Validate file type
-  if (!ALLOWED_TYPES.includes(file.type)) {
-    throw new Error('Invalid file type. Only images are allowed (JPEG, PNG, GIF, WebP)')
+  if (!allowedTypes.includes(file.type)) {
+    const typeList = type === 'image' ? 'JPEG, PNG, GIF, WebP' : 'MP4, WebM, OGG, MOV'
+    throw new Error(`Invalid file type. Only ${type}s are allowed (${typeList})`)
   }
   
   // Ensure upload directory exists

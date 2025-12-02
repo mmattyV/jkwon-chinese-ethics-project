@@ -1,0 +1,94 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/db'
+import { getCurrentUser } from '@/lib/auth'
+
+// POST /api/posts/[id]/vote - Vote on a post
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const user = await getCurrentUser()
+    
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      )
+    }
+    
+    const { id: postId } = await params
+    const body = await request.json()
+    const { value } = body
+    
+    // Validate input
+    if (value !== 1 && value !== -1) {
+      return NextResponse.json(
+        { error: 'Vote value must be 1 (like) or -1 (dislike)' },
+        { status: 400 }
+      )
+    }
+    
+    // Verify post exists
+    const postExists = await prisma.post.findUnique({
+      where: { id: postId },
+    })
+    
+    if (!postExists) {
+      return NextResponse.json(
+        { error: 'Post not found' },
+        { status: 404 }
+      )
+    }
+    
+    // Check for existing vote
+    const existingVote = await prisma.postVote.findUnique({
+      where: {
+        postId_userId: {
+          postId,
+          userId: user.id,
+        },
+      },
+    })
+    
+    if (existingVote) {
+      if (existingVote.value === value) {
+        // Same vote - remove it (toggle off)
+        await prisma.postVote.delete({
+          where: { id: existingVote.id },
+        })
+      } else {
+        // Different vote - update it
+        await prisma.postVote.update({
+          where: { id: existingVote.id },
+          data: { value },
+        })
+      }
+    } else {
+      // No existing vote - create new one
+      await prisma.postVote.create({
+        data: {
+          postId,
+          userId: user.id,
+          value,
+        },
+      })
+    }
+    
+    // Calculate new score
+    const votes = await prisma.postVote.findMany({
+      where: { postId },
+    })
+    
+    const score = votes.reduce((sum, vote) => sum + vote.value, 0)
+    
+    return NextResponse.json({ score, votes })
+  } catch (error) {
+    console.error('Vote post error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+

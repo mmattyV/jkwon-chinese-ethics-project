@@ -19,6 +19,7 @@ model User {
   posts        Post[]
   comments     Comment[]
   commentVotes CommentVote[]
+  postVotes    PostVote[]
   sessions     Session[]
 }
 
@@ -37,11 +38,13 @@ model Post {
   title     String
   content   String
   imageUrl  String?  // Optional image URL
+  videoUrl  String?  // Optional video URL
   authorId  String
   createdAt DateTime @default(now())
   
   author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments Comment[]
+  votes    PostVote[]
   
   @@index([createdAt])
 }
@@ -76,5 +79,19 @@ model CommentVote {
   
   @@unique([commentId, userId])
   @@index([commentId])
+}
+
+model PostVote {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  value     Int      // 1 for like, -1 for dislike
+  createdAt DateTime @default(now())
+  
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([postId, userId])
+  @@index([postId])
 }
 

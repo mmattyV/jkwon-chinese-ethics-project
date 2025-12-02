@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db'
+import { getCurrentUser } from '@/lib/auth'
 import PostList from '@/components/PostList'
 import Pagination from '@/components/Pagination'
 
@@ -11,6 +12,8 @@ export default async function Home({ searchParams }: PageProps) {
   const page = parseInt(params.page || '1')
   const limit = 10
   const skip = (page - 1) * limit
+  
+  const user = await getCurrentUser()
   
   const [posts, total] = await Promise.all([
     prisma.post.findMany({
@@ -27,6 +30,7 @@ export default async function Home({ searchParams }: PageProps) {
         _count: {
           select: { comments: true },
         },
+        votes: true,
       },
     }),
     prisma.post.count(),
@@ -47,7 +51,7 @@ export default async function Home({ searchParams }: PageProps) {
         </div>
       ) : (
         <>
-          <PostList posts={posts} />
+          <PostList posts={posts} currentUserId={user?.id} />
           {totalPages > 1 && (
             <Pagination currentPage={page} totalPages={totalPages} />
           )}

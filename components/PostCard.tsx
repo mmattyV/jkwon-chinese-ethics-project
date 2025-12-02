@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { formatDistanceToNow } from '@/lib/utils'
+import PostVoteButtons from './PostVoteButtons'
 
 interface Post {
   id: string
   title: string
   content: string
   imageUrl: string | null
+  videoUrl: string | null
   createdAt: Date
   author: {
     id: string
@@ -15,36 +17,63 @@ interface Post {
   _count: {
     comments: number
   }
+  votes: Array<{
+    id: string
+    value: number
+    userId: string
+  }>
 }
 
 interface PostCardProps {
   post: Post
+  currentUserId?: string
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, currentUserId }: PostCardProps) {
   const contentPreview = post.content.length > 200 
     ? post.content.substring(0, 200) + '...' 
     : post.content
   
   return (
-    <Link href={`/posts/${post.id}`}>
-      <div className="card p-6 hover:shadow-md transition-shadow cursor-pointer">
-        <div className="flex gap-4">
-          {post.imageUrl && (
+    <div className="card hover:shadow-md transition-shadow">
+      <div className="flex gap-4 p-6">
+        {/* Vote buttons */}
+        <div className="flex-shrink-0">
+          <PostVoteButtons
+            postId={post.id}
+            initialVotes={post.votes}
+            currentUserId={currentUserId}
+            vertical
+          />
+        </div>
+        
+        {/* Post content */}
+        <Link href={`/posts/${post.id}`} className="flex-1 min-w-0 flex gap-4">
+          {/* Media thumbnail */}
+          {(post.imageUrl || post.videoUrl) && (
             <div className="flex-shrink-0">
               <div className="relative w-32 h-32 rounded-lg overflow-hidden bg-gray-100">
-                <Image
-                  src={post.imageUrl}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                />
+                {post.imageUrl && (
+                  <Image
+                    src={post.imageUrl}
+                    alt={post.title}
+                    fill
+                    className="object-cover"
+                  />
+                )}
+                {post.videoUrl && !post.imageUrl && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                    <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
+                    </svg>
+                  </div>
+                )}
               </div>
             </div>
           )}
           
           <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-orange-600">
+            <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-cerulean-600 cursor-pointer">
               {post.title}
             </h2>
             
@@ -60,9 +89,9 @@ export default function PostCard({ post }: PostCardProps) {
               <span>{post._count.comments} {post._count.comments === 1 ? 'comment' : 'comments'}</span>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
-    </Link>
+    </div>
   )
 }
 

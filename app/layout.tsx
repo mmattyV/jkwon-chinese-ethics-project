@@ -6,8 +6,8 @@ import Header from '@/components/Header'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Reddit Clone',
-  description: 'A minimal Reddit-style web app',
+  title: 'PhiloFeed',
+  description: 'A thoughtful community for sharing ideas and discussions',
 }
 
 export default function RootLayout({

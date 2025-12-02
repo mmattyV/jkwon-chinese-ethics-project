@@ -44,7 +44,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
             href={`/?page=${page}`}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               page === currentPage
-                ? 'bg-orange-500 text-white'
+                ? 'bg-cerulean-500 text-white'
                 : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
             }`}
           >

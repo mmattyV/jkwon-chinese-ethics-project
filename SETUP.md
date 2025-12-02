@@ -1,6 +1,6 @@
 # Quick Setup Guide
 
-This is a streamlined setup guide to get your Reddit Clone running quickly.
+This is a streamlined setup guide to get **PhiloFeed** running quickly.
 
 ## 1. Install Dependencies
 
@@ -16,11 +16,11 @@ If you have PostgreSQL installed locally:
 
 ```bash
 # Create a new database
-createdb reddit_clone
+createdb philofeed
 
 # Or using psql
 psql -U postgres
-CREATE DATABASE reddit_clone;
+CREATE DATABASE philofeed;
 \q
 ```
 
@@ -45,7 +45,7 @@ Create `.env` file in the root:
 
 ```env
 # Replace with your actual database URL
-DATABASE_URL="postgresql://user:password@localhost:5432/reddit_clone?schema=public"
+DATABASE_URL="postgresql://user:password@localhost:5432/philofeed?schema=public"
 
 # Generate a random secret (use: openssl rand -base64 32)
 SESSION_SECRET="your-secret-key-here"

@@ -21,6 +21,7 @@ export async function GET(
         _count: {
           select: { comments: true },
         },
+        votes: true,
       },
     })
     

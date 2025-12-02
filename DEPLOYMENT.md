@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This guide walks you through deploying your Reddit Clone to production.
+This guide walks you through deploying **PhiloFeed** to production.
 
 ## Pre-Deployment Checklist
 

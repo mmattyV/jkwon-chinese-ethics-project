@@ -1,6 +1,6 @@
 # 🚀 Getting Started
 
-Welcome! Your Reddit Clone is ready to run. Follow these steps to get started.
+Welcome to **PhiloFeed**! Your thoughtful community platform is ready to run. Follow these steps to get started.
 
 ## Quick Start (5 minutes)
 
@@ -14,7 +14,7 @@ npm install
 **Option A: Use a Free Cloud Database (Easiest)**
 
 1. Go to [neon.tech](https://neon.tech) and create a free account
-2. Create a new project
+2. Create a new project named `philofeed`
 3. Copy the connection string
 
 **Option B: Use Local PostgreSQL**
@@ -29,7 +29,7 @@ createdb reddit_clone
 Create a file named `.env` in the root folder:
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/reddit_clone?schema=public"
+DATABASE_URL="postgresql://user:password@localhost:5432/philofeed?schema=public"
 SESSION_SECRET="change-this-to-a-random-string"
 ```
 
