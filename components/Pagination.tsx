@@ -3,9 +3,10 @@ import Link from 'next/link'
 interface PaginationProps {
   currentPage: number
   totalPages: number
+  sortBy?: string
 }
 
-export default function Pagination({ currentPage, totalPages }: PaginationProps) {
+export default function Pagination({ currentPage, totalPages, sortBy = 'hot' }: PaginationProps) {
   const pages = []
   
   // Generate page numbers to display
@@ -26,7 +27,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
     <div className="flex justify-center items-center space-x-2 mt-8">
       {currentPage > 1 && (
         <Link
-          href={`/?page=${currentPage - 1}`}
+          href={`/?page=${currentPage - 1}&sort=${sortBy}`}
           className="btn-outline"
         >
           Previous
@@ -41,7 +42,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
         ) : (
           <Link
             key={page}
-            href={`/?page=${page}`}
+            href={`/?page=${page}&sort=${sortBy}`}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               page === currentPage
                 ? 'bg-cerulean-500 text-white'
@@ -55,7 +56,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       
       {currentPage < totalPages && (
         <Link
-          href={`/?page=${currentPage + 1}`}
+          href={`/?page=${currentPage + 1}&sort=${sortBy}`}
           className="btn-outline"
         >
           Next
